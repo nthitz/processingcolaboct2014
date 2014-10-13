@@ -34,33 +34,19 @@ void draw_() {
   float x = 250;
   float y = 0;
   float size = 100;
-  float size2 = 0;
-  float size3 = 0;
+  float h = size;
   if (t<t1) y = map(t, 0,t1, -50,50); // entry
   if (t>t2) y = map(t, t2,1, 450,550); // exit
   if (t>=t1 && t<=t2) {
-    float tt = map(t, t1,t2, 0,1);
+    float tt = map(t, t1, t2, 0,1);
     y = map(t, t1,t2, 50,450);
     x = width / 2;
-    size = map(t, t1, t2 / 2, 100,200);
-    println(tt + " " + ease(tt,3));
-    float tt1 = map(tt,0,0.5,0,1);
-    float tt2 = map(tt,0.5,1, 0,1);
-    if(tt < 0.5) {
-      size = ease(tt1,2) * 100 * 100 + 100;
-    } else {
-      size = ease(tt2,2) * 100 * 100 * 100 +  100 + 100 * 100;
-    }
-    size2 = size / 100;
-    size3 = size2 / 100;
-    
+    h = map(ease(pingpong(tt),1), 0, 1, h, 0);
+    size = 100 - h;
+    size = h;
+    fill(map(pingpong(tt), 0, 1, 0, 255)) ;
   }
-  
-  ellipse(x,y, size,size);  
-  fill(255);
-  ellipse(x,y, size2,size2);  
-  fill(0);
-  ellipse(x,y, size3,size3);  
+  ellipse(x,y, size,h);  
   
 }
 
@@ -68,4 +54,6 @@ void draw_() {
 float ease(float t, float e) {
   return t < 0.5 ? 0.5 * pow(2*t, e) : 1 - 0.5 * pow(2*(1 - t), e);  
 }
-
+float pingpong(float t) { //  / => /\
+  return 1-2*abs(t-0.5);
+}
